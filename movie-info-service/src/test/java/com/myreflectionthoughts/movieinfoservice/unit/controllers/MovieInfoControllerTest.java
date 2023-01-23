@@ -2,6 +2,7 @@ package com.myreflectionthoughts.movieinfoservice.unit.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -16,7 +17,9 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.myreflectionthoughts.movieinfoservice.ConstructUtils;
 import com.myreflectionthoughts.movieinfoservice.controllers.MovieInfoController;
+import com.myreflectionthoughts.movieinfoservice.dto.response.ExceptionResponse;
 import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
+import com.myreflectionthoughts.movieinfoservice.exceptions.MovieInfoNotFoundException;
 import com.myreflectionthoughts.movieinfoservice.services.MovieInfoService;
 
 import reactor.core.publisher.Flux;
@@ -45,18 +48,18 @@ public class MovieInfoControllerTest {
         when(movieInfoServiceMock.save(any())).thenReturn(Mono.just(addMovieInfoRequestBody));
 
         webTestClient.post()
-                        .uri("/movie-info-service/")
+                        .uri("/movie-info-service/movie/")
                         .bodyValue(constructUtils.constructAddMovieInfo())
                         .exchange()
                         .expectStatus()
                         .is2xxSuccessful()
                         .expectBody(MovieInfoResponse.class)
-                        .value(expectedMovieInfoResponse->{
-                            assertEquals(addMovieInfoRequestBody.getMovieInfoId(),expectedMovieInfoResponse.getMovieInfoId());
-                            assertEquals(addMovieInfoRequestBody.getTitle(), expectedMovieInfoResponse.getTitle());
-                            assertEquals(addMovieInfoRequestBody.getYear(), expectedMovieInfoResponse.getYear());
-                            assertEquals(addMovieInfoRequestBody.getReleaseDate(), expectedMovieInfoResponse.getReleaseDate());
-                            assertEquals(addMovieInfoRequestBody.getCast(), expectedMovieInfoResponse.getCast());
+                        .value(actualMovieInfoResponse->{
+                            assertEquals(addMovieInfoRequestBody.getMovieInfoId(),actualMovieInfoResponse.getMovieInfoId());
+                            assertEquals(addMovieInfoRequestBody.getTitle(), actualMovieInfoResponse.getTitle());
+                            assertEquals(addMovieInfoRequestBody.getYear(), actualMovieInfoResponse.getYear());
+                            assertEquals(addMovieInfoRequestBody.getReleaseDate(), actualMovieInfoResponse.getReleaseDate());
+                            assertEquals(addMovieInfoRequestBody.getCast(), actualMovieInfoResponse.getCast());
                         });
     
         verify(movieInfoServiceMock,times(1)).save(any());
@@ -68,7 +71,7 @@ public class MovieInfoControllerTest {
         when(movieInfoServiceMock.getAll()).thenReturn(Flux.just(expectedMovieInfoResponse));
 
         webTestClient.get()
-                     .uri("/movie-info-service/")
+                     .uri("/movie-info-service/movie/all")
                      .exchange()
                      .expectStatus()
                      .is2xxSuccessful()
@@ -78,6 +81,44 @@ public class MovieInfoControllerTest {
         verify(movieInfoServiceMock,times(1)).getAll();
     }
 
+    @Test
+    void testGetMovie_Success(){
+
+        var expectedMovieInfoResponse = constructUtils.constructMovieInfoResponse();
+        when(movieInfoServiceMock.findEntity(anyString())).thenReturn(Mono.just(expectedMovieInfoResponse));
+
+        webTestClient.get()
+                     .uri("/movie-info-service/movie/{id}","abcd@movie")
+                     .exchange()
+                     .expectStatus()
+                     .is2xxSuccessful()
+                     .expectBody(MovieInfoResponse.class)
+                     .value(actualMovieInfoResponse->{
+                        assertEquals(expectedMovieInfoResponse.getMovieInfoId(), actualMovieInfoResponse.getMovieInfoId());
+                        assertEquals(expectedMovieInfoResponse.getTitle(), actualMovieInfoResponse.getTitle());
+                        assertEquals(expectedMovieInfoResponse.getReleaseDate(), actualMovieInfoResponse.getReleaseDate());
+                        assertEquals(expectedMovieInfoResponse.getCast(), actualMovieInfoResponse.getCast());
+                        assertEquals(expectedMovieInfoResponse.getReleaseDate(), actualMovieInfoResponse.getReleaseDate());
+                     });
+
+        verify(movieInfoServiceMock,times(1)).findEntity(anyString());             
+    }
+    
+    @Test
+    void testGetMovie_Failure(){
+
+
+        when(movieInfoServiceMock.findEntity(anyString())).thenThrow(MovieInfoNotFoundException.class);
+
+        webTestClient.get()
+                     .uri("/movie-info-service/movie/{id}","abcd@movie")
+                     .exchange()
+                     .expectStatus()
+                     .is4xxClientError()
+                     .expectBody(ExceptionResponse.class);
+                     
+        verify(movieInfoServiceMock,times(1)).findEntity(anyString());             
+    }
     
     
 }
