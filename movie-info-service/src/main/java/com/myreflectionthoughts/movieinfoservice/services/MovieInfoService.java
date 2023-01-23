@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.myreflectionthoughts.movieinfoservice.contracts.FindAll;
+import com.myreflectionthoughts.movieinfoservice.contracts.FindOne;
 import com.myreflectionthoughts.movieinfoservice.contracts.SaveEntity;
 import com.myreflectionthoughts.movieinfoservice.dto.request.AddMovieInfo;
 import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
+import com.myreflectionthoughts.movieinfoservice.exceptions.MovieInfoNotFoundException;
 import com.myreflectionthoughts.movieinfoservice.repositories.MovieInfoRepository;
 import com.myreflectionthoughts.movieinfoservice.utils.MovieInfoMapper;
 
@@ -16,7 +18,8 @@ import reactor.core.publisher.Mono;
 @Service
 public class MovieInfoService 
 implements SaveEntity<AddMovieInfo,MovieInfoResponse>,
-FindAll<MovieInfoResponse>
+FindAll<MovieInfoResponse>,
+FindOne<MovieInfoResponse>
 {
     
     @Autowired 
@@ -33,6 +36,19 @@ FindAll<MovieInfoResponse>
     @Override
     public Flux<MovieInfoResponse> getAll() {
         return movieInfoRepository.findAll().map(movieInfoMapper::toMovieResponseDTO);
+    }
+
+    @Override
+    public Mono<MovieInfoResponse> findEntity(String movieId) {
+
+
+              return movieInfoRepository
+                                        .findById(movieId)
+                                        .map(movieInfoMapper::toMovieResponseDTO)
+                                        .switchIfEmpty(Mono.error(
+                                            new MovieInfoNotFoundException(String.format("Movie info for id:- %s does not exist",movieId))
+                                        ));
+    
     }
 
 }
