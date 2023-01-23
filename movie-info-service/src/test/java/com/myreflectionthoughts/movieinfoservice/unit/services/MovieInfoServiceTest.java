@@ -17,6 +17,7 @@ import com.myreflectionthoughts.movieinfoservice.repositories.MovieInfoRepositor
 import com.myreflectionthoughts.movieinfoservice.services.MovieInfoService;
 import com.myreflectionthoughts.movieinfoservice.utils.MovieInfoMapper;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -27,10 +28,10 @@ public class MovieInfoServiceTest {
      private MovieInfoService movieInfoService;
 
      @Mock
-     private MovieInfoRepository movieInfoRepository; 
+     private MovieInfoRepository movieInfoRepositoryMock; 
 
      @Mock
-     private MovieInfoMapper movieInfoMapper;
+     private MovieInfoMapper movieInfoMapperMock;
 
      private ConstructUtils constructUtils;
 
@@ -44,9 +45,9 @@ public class MovieInfoServiceTest {
        var movieInfoEntity = constructUtils.constructMovieInfoEntity();
        var expectedMovieResponse = constructUtils.constructMovieInfoResponse();
 
-       when(movieInfoMapper.toMovieInfo(any(AddMovieInfo.class))).thenReturn(movieInfoEntity);
-       when(movieInfoRepository.save(any(MovieInfo.class))).thenReturn(Mono.just(movieInfoEntity));
-       when(movieInfoMapper.toMovieResponseDTO(any(MovieInfo.class))).thenReturn(constructUtils.constructMovieInfoResponse());
+       when(movieInfoMapperMock.toMovieInfo(any(AddMovieInfo.class))).thenReturn(movieInfoEntity);
+       when(movieInfoRepositoryMock.save(any(MovieInfo.class))).thenReturn(Mono.just(movieInfoEntity));
+       when(movieInfoMapperMock.toMovieResponseDTO(any(MovieInfo.class))).thenReturn(constructUtils.constructMovieInfoResponse());
        
        Mono<MovieInfoResponse> actualMovieInfoResponse = movieInfoService.save(Mono.just(constructUtils.constructAddMovieInfo()));
 
@@ -58,6 +59,19 @@ public class MovieInfoServiceTest {
           assertEquals(expectedMovieResponse.getCast(), movieInfoResponse.getCast());
           assertEquals(expectedMovieResponse.getYear(), movieInfoResponse.getYear());
        }).verifyComplete();
+    }
+
+    @Test
+    void testGetAll(){
+
+       var expectedMovieInfoResponse = constructUtils.constructMovieInfoResponse();
+
+       when(movieInfoRepositoryMock.findAll()).thenReturn(Flux.just(constructUtils.constructMovieInfoEntity()));
+       when(movieInfoMapperMock.toMovieResponseDTO(any(MovieInfo.class))).thenReturn(expectedMovieInfoResponse);
+
+       Flux<MovieInfoResponse> actualMovieInfoRetreived = movieInfoService.getAll();
+       
+       StepVerifier.create(actualMovieInfoRetreived).expectNextCount(1).verifyComplete();
     }
     
 

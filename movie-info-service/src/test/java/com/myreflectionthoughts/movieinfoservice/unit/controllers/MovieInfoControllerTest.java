@@ -6,6 +6,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
@@ -17,6 +19,7 @@ import com.myreflectionthoughts.movieinfoservice.controllers.MovieInfoController
 import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.services.MovieInfoService;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @WebFluxTest(MovieInfoController.class)
@@ -57,7 +60,22 @@ public class MovieInfoControllerTest {
                         });
     
         verify(movieInfoServiceMock,times(1)).save(any());
-    
+    }
+
+    @Test
+    void testGetAllMovies(){
+        var expectedMovieInfoResponse = constructUtils.constructMovieInfoResponse();
+        when(movieInfoServiceMock.getAll()).thenReturn(Flux.just(expectedMovieInfoResponse));
+
+        webTestClient.get()
+                     .uri("/movie-info-service/")
+                     .exchange()
+                     .expectStatus()
+                     .is2xxSuccessful()
+                     .expectBodyList(MovieInfoResponse.class)
+                     .isEqualTo(List.of(expectedMovieInfoResponse));
+        
+        verify(movieInfoServiceMock,times(1)).getAll();
     }
 
     
