@@ -13,3 +13,6 @@ spring:
       host: localhost
       port: 27017
       database: movieInfo_local    
+
+server:
+  port: 8002
