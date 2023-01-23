@@ -3,6 +3,7 @@ package com.myreflectionthoughts.movieinfoservice.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("movie-info-service/")
+@RequestMapping("movie-info-service/movie/")
 public class MovieInfoController {
 
     @Autowired
@@ -29,10 +30,16 @@ public class MovieInfoController {
         return movieInfoService.save(addMovieInfo);
     }
 
-    @GetMapping
+    @GetMapping("all")
     @ResponseStatus(HttpStatus.OK)
     Flux<MovieInfoResponse> getAllMovies(){
         return movieInfoService.getAll();
+    }
+
+    @GetMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    Mono<MovieInfoResponse> getMovie(@PathVariable("id") String movieId){
+        return movieInfoService.findEntity(movieId);
     }
 
     
