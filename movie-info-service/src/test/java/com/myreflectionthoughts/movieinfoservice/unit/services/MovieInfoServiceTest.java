@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.withSettings;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -19,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.myreflectionthoughts.movieinfoservice.ConstructUtils;
 import com.myreflectionthoughts.movieinfoservice.dto.request.AddMovieInfo;
+import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoDeletionResponse;
 import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.exceptions.MovieInfoNotFoundException;
 import com.myreflectionthoughts.movieinfoservice.models.MovieInfo;
@@ -180,5 +180,46 @@ public class MovieInfoServiceTest {
       verify(movieInfoRepositoryMock,times(1)).findById(anyString());
       verify(movieInfoRepositoryMock,times(0)).save(any(MovieInfo.class));
       verify(movieInfoMapperMock,times(0)).toMovieResponseDTO(any(MovieInfo.class));    
+    }
+
+    @Test
+    void testDelete_Success(){
+
+      var movieId = "abcd@movie";
+      var movieInfoDeletionResponse = new MovieInfoDeletionResponse();
+      movieInfoDeletionResponse.setId(movieId);
+      movieInfoDeletionResponse.setMessage(String.format("Request for deleting movie (id:- %s) has been sucessfully completed",movieId));
+      
+
+       when(movieInfoRepositoryMock.findById(anyString())).thenReturn(Mono.just(constructUtils.constructMovieInfoEntity()));
+       when(movieInfoRepositoryMock.deleteById(anyString())).thenReturn(Mono.empty());
+        
+       Mono<MovieInfoDeletionResponse> receivedResponse = movieInfoService.delete(movieId);
+
+       StepVerifier.create(receivedResponse).expectNext(movieInfoDeletionResponse).verifyComplete();
+
+       verify(movieInfoRepositoryMock,times(1)).findById(anyString());
+       verify(movieInfoRepositoryMock,times(1)).deleteById(anyString());
+       
+
+    }
+
+    @Test
+    void testDelete_Failure(){
+
+      var movieId = "abcd@movie";
+      var movieInfoDeletionResponse = new MovieInfoDeletionResponse();
+      movieInfoDeletionResponse.setId(movieId);
+      movieInfoDeletionResponse.setMessage(String.format("Request for deleting movie (id:- %s) has been sucessfully completed",movieId));
+      
+     when(movieInfoRepositoryMock.findById(anyString())).thenReturn(Mono.empty());
+     when(movieInfoRepositoryMock.deleteById(anyString())).thenReturn(Mono.empty());
+      
+     Mono<MovieInfoDeletionResponse> receivedResponse = movieInfoService.delete(movieId);
+     StepVerifier.create(receivedResponse).expectError(MovieInfoNotFoundException.class).verify();
+     verify(movieInfoRepositoryMock,times(1)).findById(anyString());
+     verify(movieInfoRepositoryMock,times(0)).deleteById(anyString());
+       
+
     }
 }

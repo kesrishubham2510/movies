@@ -3,12 +3,14 @@ package com.myreflectionthoughts.movieinfoservice.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.myreflectionthoughts.movieinfoservice.contracts.DeleteEntity;
 import com.myreflectionthoughts.movieinfoservice.contracts.FindAll;
 import com.myreflectionthoughts.movieinfoservice.contracts.FindOne;
 import com.myreflectionthoughts.movieinfoservice.contracts.SaveEntity;
 import com.myreflectionthoughts.movieinfoservice.contracts.UpdateEntity;
 import com.myreflectionthoughts.movieinfoservice.dto.request.AddMovieInfo;
 import com.myreflectionthoughts.movieinfoservice.dto.request.UpdateMovieInfo;
+import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoDeletionResponse;
 import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.exceptions.MovieInfoNotFoundException;
 import com.myreflectionthoughts.movieinfoservice.repositories.MovieInfoRepository;
@@ -22,7 +24,8 @@ public class MovieInfoService
 implements SaveEntity<AddMovieInfo,MovieInfoResponse>,
 FindAll<MovieInfoResponse>,
 FindOne<MovieInfoResponse>,
-UpdateEntity<UpdateMovieInfo,MovieInfoResponse>
+UpdateEntity<UpdateMovieInfo,MovieInfoResponse>,
+DeleteEntity<MovieInfoDeletionResponse>
 {
     
     @Autowired 
@@ -75,6 +78,21 @@ UpdateEntity<UpdateMovieInfo,MovieInfoResponse>
                                             )
                                         );
         });
+    }
+
+    @Override
+    public Mono<MovieInfoDeletionResponse> delete(String movieId) {
+        return movieInfoRepository.findById(movieId).flatMap(retreivedMovie->{
+            var movieInfoDeletionResponse = new MovieInfoDeletionResponse();
+            movieInfoDeletionResponse.setId(movieId);
+            movieInfoDeletionResponse.setMessage(String.format("Request for deleting movie (id:- %s) has been sucessfully completed",movieId));
+            return movieInfoRepository.deleteById(movieId).thenReturn(movieInfoDeletionResponse);
+        }).switchIfEmpty(
+            Mono.error(
+                new MovieInfoNotFoundException(String.format("Movie info for id:- %s does not exist",movieId))
+            )
+        );
+        
     }
 
     

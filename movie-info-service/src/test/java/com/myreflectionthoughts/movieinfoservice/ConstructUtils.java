@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.myreflectionthoughts.movieinfoservice.dto.request.AddMovieInfo;
 import com.myreflectionthoughts.movieinfoservice.dto.request.UpdateMovieInfo;
+import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoDeletionResponse;
 import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.models.MovieInfo;
 
@@ -95,6 +96,15 @@ public class ConstructUtils {
         movieInfo.setYear(updatedYear);
         movieInfo.setReleaseDate(updatedReleaseDate);
         return movieInfo;
+    }
+
+    public MovieInfoDeletionResponse constructMovieInfoDeletionResponse(){
+
+        var movieInfoDeletionResponse = new MovieInfoDeletionResponse();
+        movieInfoDeletionResponse.setId(movieId);
+        movieInfoDeletionResponse.setMessage(String.format("Request for deleting movie (id:- %s) has been sucessfully completed",movieId));
+
+        return movieInfoDeletionResponse;
     }
 
     

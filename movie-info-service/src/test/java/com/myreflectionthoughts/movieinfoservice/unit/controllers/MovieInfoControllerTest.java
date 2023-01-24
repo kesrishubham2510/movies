@@ -20,6 +20,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import com.myreflectionthoughts.movieinfoservice.ConstructUtils;
 import com.myreflectionthoughts.movieinfoservice.controllers.MovieInfoController;
 import com.myreflectionthoughts.movieinfoservice.dto.response.ExceptionResponse;
+import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoDeletionResponse;
 import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.exceptions.MovieInfoNotFoundException;
 import com.myreflectionthoughts.movieinfoservice.services.MovieInfoService;
@@ -158,6 +159,40 @@ public class MovieInfoControllerTest {
                      .expectBody(ExceptionResponse.class);
                      
         verify(movieInfoServiceMock,times(1)).update(any());             
+    }
+
+    @Test
+    void testDeleteMovieInfo_Success(){
+
+        var movieId = "abcd@movie";
+        var expectedMovieDeletionResponse = constructUtils.constructMovieInfoDeletionResponse();
+        when(movieInfoServiceMock.delete(anyString())).thenReturn(Mono.just(expectedMovieDeletionResponse));
+
+        webTestClient.delete()
+                     .uri("/movie-info-service/movie/{id}",movieId)
+                     .exchange()
+                     .expectStatus()
+                     .is2xxSuccessful()
+                     .expectBody(MovieInfoDeletionResponse.class)
+                     .value(receivedDeletionResponse->{
+                        assertEquals(expectedMovieDeletionResponse.getId(), receivedDeletionResponse.getId());
+                        assertEquals(expectedMovieDeletionResponse.getMessage(), receivedDeletionResponse.getMessage());
+                     });
+    }
+
+    @Test
+    void testDeleteMovieInfo_Failure(){
+
+        var movieId = "abcd@movie";
+       
+        when(movieInfoServiceMock.delete(anyString())).thenThrow(MovieInfoNotFoundException.class);
+
+        webTestClient.delete()
+                     .uri("/movie-info-service/movie/{id}",movieId)
+                     .exchange()
+                     .expectStatus()
+                     .is4xxClientError()
+                     .expectBody(MovieInfoNotFoundException.class);
     }
     
 }

@@ -2,6 +2,8 @@ package com.myreflectionthoughts.movieinfoservice.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.myreflectionthoughts.movieinfoservice.dto.request.AddMovieInfo;
 import com.myreflectionthoughts.movieinfoservice.dto.request.UpdateMovieInfo;
+import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoDeletionResponse;
 import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.services.MovieInfoService;
 
@@ -48,6 +51,12 @@ public class MovieInfoController {
     @ResponseStatus(HttpStatus.OK)
     Mono<MovieInfoResponse> updateMovieInfo(@RequestBody Mono<UpdateMovieInfo> updateMovieInfo){
         return movieInfoService.update(updateMovieInfo);
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    Mono<MovieInfoDeletionResponse> deleteMovieInfo(@PathVariable("id") String movieId){
+      return movieInfoService.delete(movieId);
     }
 
     
