@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import com.myreflectionthoughts.movieinfoservice.dto.request.AddMovieInfo;
+import com.myreflectionthoughts.movieinfoservice.dto.request.UpdateMovieInfo;
 import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.models.MovieInfo;
 
@@ -59,5 +60,42 @@ public class ConstructUtils {
 
         return movieInfoResponse;
     }
+
+    public UpdateMovieInfo constructUpdateMovieInfoEntity(String updatedTitle, Integer updatedYear, List<String> updatedCast, LocalDate updatedReleaseDate){
+        var updateMovieInfo = new UpdateMovieInfo();
+
+        updateMovieInfo.setMovieInfoId(movieId);
+        updateMovieInfo.setTitle(updatedTitle);
+        updateMovieInfo.setCast(updatedCast);
+        updateMovieInfo.setYear(updatedYear);
+        updateMovieInfo.setReleaseDate(updatedReleaseDate);
+        return updateMovieInfo;
+    }
+
+
+    public MovieInfoResponse constructMovieInfoResponse(String updatedTitle, Integer updatedYear, List<String> updatedCast, LocalDate updatedReleaseDate){
+
+        var updatedMovieInfoResponse = new MovieInfoResponse();
+
+        updatedMovieInfoResponse.setMovieInfoId(movieId);
+        updatedMovieInfoResponse.setTitle(updatedTitle);
+        updatedMovieInfoResponse.setCast(updatedCast);
+        updatedMovieInfoResponse.setYear(updatedYear);
+        updatedMovieInfoResponse.setReleaseDate(updatedReleaseDate);
+
+        return updatedMovieInfoResponse;
+    }
+
+    public MovieInfo constructMovieInfoEntity(String updatedTitle, Integer updatedYear, List<String> updatedCast, LocalDate updatedReleaseDate){
+        var movieInfo = new MovieInfo();
+
+        movieInfo.setMovieInfoId(movieId);
+        movieInfo.setTitle(updatedTitle);
+        movieInfo.setCast(updatedCast);
+        movieInfo.setYear(updatedYear);
+        movieInfo.setReleaseDate(updatedReleaseDate);
+        return movieInfo;
+    }
+
     
 }

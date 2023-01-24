@@ -5,12 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.myreflectionthoughts.movieinfoservice.dto.request.AddMovieInfo;
+import com.myreflectionthoughts.movieinfoservice.dto.request.UpdateMovieInfo;
 import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.services.MovieInfoService;
 
@@ -40,6 +42,12 @@ public class MovieInfoController {
     @ResponseStatus(HttpStatus.OK)
     Mono<MovieInfoResponse> getMovie(@PathVariable("id") String movieId){
         return movieInfoService.findEntity(movieId);
+    }
+
+    @PutMapping()
+    @ResponseStatus(HttpStatus.OK)
+    Mono<MovieInfoResponse> updateMovieInfo(@RequestBody Mono<UpdateMovieInfo> updateMovieInfo){
+        return movieInfoService.update(updateMovieInfo);
     }
 
     

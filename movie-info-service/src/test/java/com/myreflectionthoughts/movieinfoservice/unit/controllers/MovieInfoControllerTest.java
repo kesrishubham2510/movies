@@ -7,6 +7,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -107,7 +109,6 @@ public class MovieInfoControllerTest {
     @Test
     void testGetMovie_Failure(){
 
-
         when(movieInfoServiceMock.findEntity(anyString())).thenThrow(MovieInfoNotFoundException.class);
 
         webTestClient.get()
@@ -120,5 +121,43 @@ public class MovieInfoControllerTest {
         verify(movieInfoServiceMock,times(1)).findEntity(anyString());             
     }
     
+    @Test
+    void testUpdateMovieInfo_Success(){
+
+        var updateMovieInfoPayload = constructUtils.constructUpdateMovieInfoEntity("updatedTitle", 2019, List.of(new String("Updated Actor")), LocalDate.parse("2010-12-25", DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        
+        var updatedMovieInfoResponse = constructUtils.constructMovieInfoResponse(updateMovieInfoPayload.getTitle(), updateMovieInfoPayload.getYear(), updateMovieInfoPayload.getCast(), updateMovieInfoPayload.getReleaseDate());
+
+
+        when(movieInfoServiceMock.update(any())).thenReturn(Mono.just(updatedMovieInfoResponse));
+
+        webTestClient.put()
+                     .uri("/movie-info-service/movie/")
+                     .bodyValue(updateMovieInfoPayload)
+                     .exchange()
+                     .expectStatus()
+                     .is2xxSuccessful()
+                     .expectBody(MovieInfoResponse.class)
+                     .isEqualTo(updatedMovieInfoResponse);
+                     
+        verify(movieInfoServiceMock,times(1)).update(any());             
+    }
+
+    @Test
+    void testUpdateMovieInfo_Failure(){
+
+        var updateMovieInfoPayload = constructUtils.constructUpdateMovieInfoEntity("updatedTitle", 2019, List.of(new String("Updated Actor")), LocalDate.parse("2010-12-25", DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        
+        when(movieInfoServiceMock.update(any())).thenThrow(MovieInfoNotFoundException.class);
+        webTestClient.put()
+                     .uri("/movie-info-service/movie/")
+                     .bodyValue(updateMovieInfoPayload)
+                     .exchange()
+                     .expectStatus()
+                     .is4xxClientError()
+                     .expectBody(ExceptionResponse.class);
+                     
+        verify(movieInfoServiceMock,times(1)).update(any());             
+    }
     
 }
