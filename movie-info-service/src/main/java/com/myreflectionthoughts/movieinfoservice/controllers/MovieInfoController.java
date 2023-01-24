@@ -18,6 +18,7 @@ import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoDeletionR
 import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.services.MovieInfoService;
 
+import jakarta.validation.Valid;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -30,7 +31,7 @@ public class MovieInfoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    Mono<MovieInfoResponse> addMovieInfo(@RequestBody Mono<AddMovieInfo> addMovieInfo){
+    Mono<MovieInfoResponse> addMovieInfo(@RequestBody @Valid Mono<AddMovieInfo> addMovieInfo){
         return movieInfoService.save(addMovieInfo);
     }
 
@@ -48,7 +49,7 @@ public class MovieInfoController {
 
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
-    Mono<MovieInfoResponse> updateMovieInfo(@RequestBody Mono<UpdateMovieInfo> updateMovieInfo){
+    Mono<MovieInfoResponse> updateMovieInfo(@RequestBody @Valid Mono<UpdateMovieInfo> updateMovieInfo){
         return movieInfoService.update(updateMovieInfo);
     }
 
