@@ -2,6 +2,7 @@ package com.myreflectionthoughts.movieinfoservice.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,8 +32,8 @@ public class MovieInfoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    Mono<MovieInfoResponse> addMovieInfo(@RequestBody @Valid Mono<AddMovieInfo> addMovieInfo){
-        return movieInfoService.save(addMovieInfo);
+    Mono<ResponseEntity<MovieInfoResponse>> addMovieInfo(@RequestBody @Valid Mono<AddMovieInfo> addMovieInfo){
+        return movieInfoService.save(addMovieInfo).map(movieInfoResponse -> ResponseEntity.status(HttpStatus.CREATED).body(movieInfoResponse));
     }
 
     @GetMapping("all")
@@ -42,21 +43,21 @@ public class MovieInfoController {
     }
 
     @GetMapping("{id}")
-    @ResponseStatus(HttpStatus.OK)
-    Mono<MovieInfoResponse> getMovie(@PathVariable("id") String movieId){
-        return movieInfoService.findEntity(movieId);
+    // @ResponseStatus(HttpStatus.OK)
+    Mono<ResponseEntity<MovieInfoResponse>> getMovie(@PathVariable("id") String movieId){
+        return movieInfoService.findEntity(movieId).map(ResponseEntity::ok);
     }
 
     @PutMapping()
-    @ResponseStatus(HttpStatus.OK)
-    Mono<MovieInfoResponse> updateMovieInfo(@RequestBody @Valid Mono<UpdateMovieInfo> updateMovieInfo){
-        return movieInfoService.update(updateMovieInfo);
+    // @ResponseStatus(HttpStatus.OK)
+    Mono<ResponseEntity<MovieInfoResponse>> updateMovieInfo(@RequestBody @Valid Mono<UpdateMovieInfo> updateMovieInfo){
+        return movieInfoService.update(updateMovieInfo).map(ResponseEntity::ok);
     }
 
     @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.OK)
-    Mono<MovieInfoDeletionResponse> deleteMovieInfo(@PathVariable("id") String movieId){
-      return movieInfoService.delete(movieId);
+    // @ResponseStatus(HttpStatus.OK)
+    Mono<ResponseEntity<MovieInfoDeletionResponse>> deleteMovieInfo(@PathVariable("id") String movieId){
+      return movieInfoService.delete(movieId).map(ResponseEntity::ok);
     }
 
     
