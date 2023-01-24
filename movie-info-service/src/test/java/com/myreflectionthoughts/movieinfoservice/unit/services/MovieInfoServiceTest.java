@@ -6,6 +6,11 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -126,8 +131,54 @@ public class MovieInfoServiceTest {
 
       verify(movieInfoRepositoryMock,times(1)).findById(anyString());
       verify(movieInfoMapperMock,times(0)).toMovieResponseDTO(any(MovieInfo.class));
-
-
     }
     
+    @Test
+    void testUpdate_Success(){
+
+      var updateMovieInfoPayload = constructUtils.constructUpdateMovieInfoEntity("updatedTitle", 2019, List.of(new String("Updated Actor")), LocalDate.parse("2010-12-25", DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+      var updatedMovieInfo = constructUtils.constructMovieInfoEntity(updateMovieInfoPayload.getTitle(), updateMovieInfoPayload.getYear(), updateMovieInfoPayload.getCast(), updateMovieInfoPayload.getReleaseDate());
+      var updatedmovieInfoResponseDTO = constructUtils.constructMovieInfoResponse(updateMovieInfoPayload.getTitle(), updateMovieInfoPayload.getYear(), updateMovieInfoPayload.getCast(), updateMovieInfoPayload.getReleaseDate());
+
+      when(movieInfoRepositoryMock.findById(anyString())).thenReturn(Mono.just(constructUtils.constructMovieInfoEntity()));
+      when(movieInfoRepositoryMock.save(any(MovieInfo.class))).thenReturn(Mono.just(updatedMovieInfo));
+      when(movieInfoMapperMock.toMovieResponseDTO(any(MovieInfo.class))).thenReturn(updatedmovieInfoResponseDTO);
+
+      Mono<MovieInfoResponse> actualMovieInfoUpdateResponse = movieInfoService.update(Mono.just(updateMovieInfoPayload));
+
+      StepVerifier.create(actualMovieInfoUpdateResponse)
+                  .consumeNextWith(receivedResponse->{
+                    assertEquals(updateMovieInfoPayload.getMovieInfoId(), receivedResponse.getMovieInfoId());
+                    assertEquals(updateMovieInfoPayload.getTitle(), receivedResponse.getTitle());
+                    assertEquals(updateMovieInfoPayload.getYear(), receivedResponse.getYear());
+                    assertEquals(updateMovieInfoPayload.getReleaseDate(), receivedResponse.getReleaseDate());
+                    assertEquals(updateMovieInfoPayload.getCast(), receivedResponse.getCast());
+                  })
+                  .verifyComplete();
+
+      verify(movieInfoRepositoryMock,times(1)).findById(anyString());
+      verify(movieInfoRepositoryMock,times(1)).save(any(MovieInfo.class));
+      verify(movieInfoMapperMock,times(1)).toMovieResponseDTO(any(MovieInfo.class));    
+    }
+
+    @Test
+    void testUpdate_Failure(){
+
+      var updateMovieInfoPayload = constructUtils.constructUpdateMovieInfoEntity("updatedTitle", 2019, List.of(new String("Updated Actor")), LocalDate.parse("2010-12-25", DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+      var updatedMovieInfo = constructUtils.constructMovieInfoEntity(updateMovieInfoPayload.getTitle(), updateMovieInfoPayload.getYear(), updateMovieInfoPayload.getCast(), updateMovieInfoPayload.getReleaseDate());
+      var updatedmovieInfoResponseDTO = constructUtils.constructMovieInfoResponse(updateMovieInfoPayload.getTitle(), updateMovieInfoPayload.getYear(), updateMovieInfoPayload.getCast(), updateMovieInfoPayload.getReleaseDate());
+
+      when(movieInfoRepositoryMock.findById(anyString())).thenReturn(Mono.empty());
+      when(movieInfoRepositoryMock.save(any(MovieInfo.class))).thenReturn(Mono.just(updatedMovieInfo));
+      when(movieInfoMapperMock.toMovieResponseDTO(any(MovieInfo.class))).thenReturn(updatedmovieInfoResponseDTO);
+
+      Mono<MovieInfoResponse> actualMovieInfoUpdateResponse = movieInfoService.update(Mono.just(updateMovieInfoPayload));
+
+      StepVerifier.create(actualMovieInfoUpdateResponse)
+                  .expectError(MovieInfoNotFoundException.class).verify();
+
+      verify(movieInfoRepositoryMock,times(1)).findById(anyString());
+      verify(movieInfoRepositoryMock,times(0)).save(any(MovieInfo.class));
+      verify(movieInfoMapperMock,times(0)).toMovieResponseDTO(any(MovieInfo.class));    
+    }
 }

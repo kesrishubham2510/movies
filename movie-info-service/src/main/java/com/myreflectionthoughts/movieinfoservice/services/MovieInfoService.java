@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import com.myreflectionthoughts.movieinfoservice.contracts.FindAll;
 import com.myreflectionthoughts.movieinfoservice.contracts.FindOne;
 import com.myreflectionthoughts.movieinfoservice.contracts.SaveEntity;
+import com.myreflectionthoughts.movieinfoservice.contracts.UpdateEntity;
 import com.myreflectionthoughts.movieinfoservice.dto.request.AddMovieInfo;
+import com.myreflectionthoughts.movieinfoservice.dto.request.UpdateMovieInfo;
 import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.exceptions.MovieInfoNotFoundException;
 import com.myreflectionthoughts.movieinfoservice.repositories.MovieInfoRepository;
@@ -19,7 +21,8 @@ import reactor.core.publisher.Mono;
 public class MovieInfoService 
 implements SaveEntity<AddMovieInfo,MovieInfoResponse>,
 FindAll<MovieInfoResponse>,
-FindOne<MovieInfoResponse>
+FindOne<MovieInfoResponse>,
+UpdateEntity<UpdateMovieInfo,MovieInfoResponse>
 {
     
     @Autowired 
@@ -30,7 +33,7 @@ FindOne<MovieInfoResponse>
 
     @Override
     public Mono<MovieInfoResponse> save(Mono<AddMovieInfo> reqDTO) {
-       return reqDTO.map(movieInfoMapper::toMovieInfo).flatMap(movieInfoRepository::save).map(movieInfoMapper::toMovieResponseDTO);
+        return reqDTO.map(movieInfoMapper::toMovieInfo).flatMap(movieInfoRepository::save).map(movieInfoMapper::toMovieResponseDTO);
     }
 
     @Override
@@ -42,7 +45,7 @@ FindOne<MovieInfoResponse>
     public Mono<MovieInfoResponse> findEntity(String movieId) {
 
 
-              return movieInfoRepository
+        return movieInfoRepository
                                         .findById(movieId)
                                         .map(movieInfoMapper::toMovieResponseDTO)
                                         .switchIfEmpty(Mono.error(
@@ -50,5 +53,30 @@ FindOne<MovieInfoResponse>
                                         ));
     
     }
+
+    @Override
+    public Mono<MovieInfoResponse> update(Mono<UpdateMovieInfo> updateReqDTO) {
+ 
+        return updateReqDTO.flatMap(requestDTO->{
+              return movieInfoRepository
+                                        .findById(requestDTO.getMovieInfoId())
+                                        .flatMap(existingMovieInfo->{
+                                            
+                                            existingMovieInfo.setCast(requestDTO.getCast());
+                                            existingMovieInfo.setReleaseDate(requestDTO.getReleaseDate());
+                                            existingMovieInfo.setTitle(requestDTO.getTitle());
+                                            existingMovieInfo.setYear(requestDTO.getYear());
+                                            
+                                            return movieInfoRepository.save(existingMovieInfo).map(movieInfoMapper::toMovieResponseDTO);
+                                        })
+                                        .switchIfEmpty(
+                                            Mono.error(
+                                                new MovieInfoNotFoundException(String.format("Movie info for id:- %s does not exist",requestDTO.getMovieInfoId()))
+                                            )
+                                        );
+        });
+    }
+
+    
 
 }
