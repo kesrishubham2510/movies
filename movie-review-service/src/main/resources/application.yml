@@ -1,0 +1,18 @@
+spring:
+  profiles:
+    active: local
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: movieReview_local    
+
+server:
+  port: 8003
