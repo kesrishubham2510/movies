@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 
 import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
+import com.myreflectionthoughts.movieinfoservice.exceptions.MovieInfoNotFoundException;
 
 public class UpdateMovieInfo extends TestSetUp{
     
@@ -55,6 +56,24 @@ public class UpdateMovieInfo extends TestSetUp{
                           });  
 
     }  
+
+    /*
+     *  The test checks the condition when a request is sent to update the movieInfo with wrong Id
+     */
+    @Test
+    void testUpdateMovie_Failure(){
+
+      var mongoObjectID = "abcd@movies";
+      var updateMovieInfoPayload = ConstructUtils.prepareUpdateMovieRequestPayload(mongoObjectID, "Movie_test_bdd_updated", 1990, List.of(new String("Actor 1 updated"), new String("Programmed Actor 2")), "1990-12-01");
+        
+      movieInfoWebClient.put()
+                        .uri(BASE_URL)
+                        .bodyValue(updateMovieInfoPayload)
+                        .exchange()
+                        .expectStatus()
+                        .isBadRequest()
+                        .expectBody(MovieInfoNotFoundException.class);  
+    }
 
 
 }
