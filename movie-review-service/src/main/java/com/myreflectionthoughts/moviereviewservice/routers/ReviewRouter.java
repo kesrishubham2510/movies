@@ -21,6 +21,7 @@ public class ReviewRouter{
                                .POST("/movie-review-service/review/",reviewRequestHanlder::handleAddReview)
                                .GET("/movie-review-service/review/{id}", reviewRequestHanlder::handleGetReview)
                                .GET("/movie-review-service/review/",reviewRequestHanlder::handleGetallReviews)
+                               .GET("/movie-review-service/review/for/{movieID}",reviewRequestHanlder::handleReviewForMovie)
                                .PUT("/movie-review-service/review/",reviewRequestHanlder::handleUpdateReview)
                                .DELETE("/movie-review-service/review/{id}",reviewRequestHanlder::handleDeleteReview)
                                .build();

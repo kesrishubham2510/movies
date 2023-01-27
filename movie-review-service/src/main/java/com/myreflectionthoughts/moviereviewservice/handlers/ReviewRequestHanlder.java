@@ -49,4 +49,9 @@ public class ReviewRequestHanlder {
         return ServerResponse.ok().body(response, DeleteReviewResponse.class);
     }
 
+    public Mono<ServerResponse> handleReviewForMovie(ServerRequest serverRequest){
+        Flux<ReviewResponse> response = reviewService.findForId(serverRequest.pathVariable("movieID"));
+        return ServerResponse.ok().body(response, ReviewResponse.class);
+    }
+
 }

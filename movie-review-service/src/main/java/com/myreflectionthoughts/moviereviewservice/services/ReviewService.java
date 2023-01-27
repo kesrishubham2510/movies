@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.myreflectionthoughts.moviereviewservice.contracts.DeleteEntity;
 import com.myreflectionthoughts.moviereviewservice.contracts.FindAll;
 import com.myreflectionthoughts.moviereviewservice.contracts.FindOne;
+import com.myreflectionthoughts.moviereviewservice.contracts.FindReviews;
 import com.myreflectionthoughts.moviereviewservice.contracts.SaveEntity;
 import com.myreflectionthoughts.moviereviewservice.contracts.UpdateEntity;
 import com.myreflectionthoughts.moviereviewservice.dto.request.AddReview;
@@ -25,7 +26,8 @@ SaveEntity<AddReview,ReviewResponse>,
 FindOne<ReviewResponse>,
 FindAll<ReviewResponse>,
 UpdateEntity<UpdateReview, ReviewResponse>,
-DeleteEntity<DeleteReviewResponse>
+DeleteEntity<DeleteReviewResponse>,
+FindReviews<ReviewResponse>
 {
 
     @Autowired
@@ -77,6 +79,14 @@ DeleteEntity<DeleteReviewResponse>
              return reviewRepository.deleteById(id).thenReturn(deleteReviewResponse);
         }).switchIfEmpty(Mono.error( new ReviewNotFoundException(String.format("The Requested review (id:- %s) does not exist",id)))) ;
 
+    }
+
+    @Override
+    public Flux<ReviewResponse> findForId(String id) {
+        // Method returns all the existing reviews for a movie
+        return  reviewRepository.findByMovieInfoId(id).map(movieReviewMapper::toReviewResponse).switchIfEmpty(
+            Mono.error( new ReviewNotFoundException(String.format("No reviews were found for the requested movie (id:- %s), Please check movieInfoId",id)))
+        );
     }
 
 }
