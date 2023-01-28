@@ -7,9 +7,9 @@
 		<artifactId>reactive-movies-api</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>com.myreflectionthoughts</groupId>
+	<groupId>${project.parent.groupId}</groupId>
 	<artifactId>movie-review-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${project.parent.version}</version>
 	<name>movie-review-service</name>
 	<description>Micro-service to get reviews of the movie</description>
 	<properties>

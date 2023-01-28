@@ -9,9 +9,9 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.myreflectionthoughts</groupId>
+	<groupId>${project.parent.groupId}</groupId>
 	<artifactId>movie-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${project.parent.version}</version>
 	<name>movie-service</name>
 	<description>API service to get details about a movie</description>
 	<properties>
@@ -21,16 +21,22 @@
 		 <dependency>
 			<groupId>com.myreflectionthoughts</groupId>
 	        <artifactId>movie-review-service</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.parent.version}</version>
 		 </dependency>
 		 <dependency>
 			<groupId>com.myreflectionthoughts</groupId>
 			<artifactId>movie-info-service</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.parent.version}</version>
 		 </dependency>
+		 <dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock</artifactId>
+			<version>1.58</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
-	<build>
+	<!-- <build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -45,6 +51,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
-	</build>
+	</build> -->
 
 </project>
