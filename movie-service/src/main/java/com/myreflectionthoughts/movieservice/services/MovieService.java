@@ -2,6 +2,7 @@ package com.myreflectionthoughts.movieservice.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -9,13 +10,15 @@ import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.moviereviewservice.dto.response.ReviewResponse;
 import com.myreflectionthoughts.movieservice.contracts.Find;
 import com.myreflectionthoughts.movieservice.dto.response.MovieResponse;
+import com.myreflectionthoughts.movieservice.exceptions.MovieInfoServiceException;
+import com.myreflectionthoughts.movieservice.exceptions.MovieReviewServiceException;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
-public class MovieService implements Find<MovieResponse>{
-    
+public class MovieService implements Find<MovieResponse> {
+
     @Autowired
     @Qualifier("movie-info-client")
     private WebClient movieInfoServiceClient;
@@ -26,35 +29,36 @@ public class MovieService implements Find<MovieResponse>{
 
     @Override
     public Mono<MovieResponse> findInfo(String movieInfoId) {
-       return getMovieInfoById(movieInfoId).flatMap(movieInfo->{
-   
-            var movieReviewListMono = getReviewsForMovie(movieInfoId).collectList();
-          
-            return movieReviewListMono.flatMap(movieReviewList->{
-                  var movieResponse = new MovieResponse();
-                  movieResponse.setMovieInfo(movieInfo);
-                  movieResponse.setReviews(movieReviewList);
-                  return Mono.just(movieResponse);
-                }
-            );
-       });   
-  }
+        return getMovieInfoById(movieInfoId).flatMap(movieInfo -> {
 
-    
-    private Mono<MovieInfoResponse> getMovieInfoById(String movieInfoId){
-        return movieInfoServiceClient
-                                    .get()
-                                    .uri("{movieInfoID}",movieInfoId)
-                                    .retrieve()
-                                    .bodyToMono(MovieInfoResponse.class);
+            var movieReviewListMono = getReviewsForMovie(movieInfoId).collectList();
+
+            return movieReviewListMono.flatMap(movieReviewList -> {
+                var movieResponse = new MovieResponse();
+                movieResponse.setMovieInfo(movieInfo);
+                movieResponse.setReviews(movieReviewList);
+                return Mono.just(movieResponse);
+            });
+        });
     }
 
-    private Flux<ReviewResponse> getReviewsForMovie(String movieInfoId){
+    private Mono<MovieInfoResponse> getMovieInfoById(String movieInfoId) {
+        return movieInfoServiceClient
+                .get()
+                .uri("{movieInfoID}", movieInfoId)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError,clientResponse -> clientResponse.bodyToMono(MovieInfoServiceException.class))
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse-> clientResponse.bodyToMono(MovieInfoServiceException.class))
+                .bodyToMono(MovieInfoResponse.class);
+    }
+
+    private Flux<ReviewResponse> getReviewsForMovie(String movieInfoId) {
         return movieReviewServiceClient
-                                      .get() 
-                                      .uri("/for/{movieInfoID}",movieInfoId)
-                                      .retrieve()
-                                      .bodyToFlux(ReviewResponse.class);
+                .get()
+                .uri("/for/{movieInfoID}", movieInfoId)
+                .retrieve()
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse-> clientResponse.bodyToMono(MovieReviewServiceException.class))
+                .bodyToFlux(ReviewResponse.class);
     }
 
 }
