@@ -71,7 +71,7 @@ public class UpdateMovieInfo extends TestSetUp{
                         .bodyValue(updateMovieInfoPayload)
                         .exchange()
                         .expectStatus()
-                        .isBadRequest()
+                        .isNotFound()
                         .expectBody(MovieInfoNotFoundException.class);  
     }
 

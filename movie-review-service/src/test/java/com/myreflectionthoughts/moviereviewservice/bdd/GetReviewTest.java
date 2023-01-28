@@ -60,7 +60,7 @@ public class GetReviewTest extends TestSetup{
                             .uri(BASE_URL+reviewID)
                             .exchange()
                             .expectStatus()
-                            .isBadRequest()
+                            .isNotFound()
                             .expectBody(String.class)
                             .consumeWith(receivedMessage->{
 

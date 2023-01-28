@@ -18,7 +18,7 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler{
       var errorMessage = dataBufferFactory.wrap(ex.getMessage().getBytes());
 
       if(ex instanceof ReviewNotFoundException){
-         exchange.getResponse().setStatusCode(HttpStatus.BAD_REQUEST);
+         exchange.getResponse().setStatusCode(HttpStatus.NOT_FOUND);
          return exchange.getResponse().writeWith(Mono.just(errorMessage));
       }
 

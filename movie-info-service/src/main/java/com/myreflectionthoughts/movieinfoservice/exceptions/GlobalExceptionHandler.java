@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleMovieInfoNotFoundException(MovieInfoNotFoundException movieInfoNotFoundException){
         var exceptionResponse = new ExceptionResponse();
         exceptionResponse.setMessage(movieInfoNotFoundException.getMessage());
-        return ResponseEntity.badRequest().body(exceptionResponse);
+        return ResponseEntity.status(404).body(exceptionResponse);
     }
 
     // To handle the bean validation related errors

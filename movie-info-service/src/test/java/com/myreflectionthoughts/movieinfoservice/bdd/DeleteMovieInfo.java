@@ -55,7 +55,7 @@ public class DeleteMovieInfo extends TestSetUp {
                            .uri(BASE_URL+mongoObjectID)
                            .exchange()
                            .expectStatus()
-                           .isBadRequest()
+                           .isNotFound()
                            .expectBody(MovieInfoNotFoundException.class);  
  
     }

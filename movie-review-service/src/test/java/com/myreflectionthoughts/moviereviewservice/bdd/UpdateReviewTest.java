@@ -66,7 +66,7 @@ public class UpdateReviewTest extends TestSetup {
                             .bodyValue(updateReviewPayload)
                             .exchange()
                             .expectStatus()
-                            .isBadRequest()
+                            .isNotFound()
                             .expectBody(String.class)
                             .consumeWith(receivedResponse->{
                                 assertEquals(String.format("The Requested review (id:- %s) does not exist",reviewID) , receivedResponse.getResponseBody());  

@@ -56,7 +56,7 @@ public class DeleteReviewTest extends TestSetup{
                           .uri(BASE_URL+reviewID)
                           .exchange()
                           .expectStatus()
-                          .isBadRequest()
+                          .isNotFound()
                           .expectBody(String.class)
                           .consumeWith(receivedResponse->{
                               assertEquals(String.format("The Requested review (id:- %s) does not exist",reviewID) , receivedResponse.getResponseBody());  
