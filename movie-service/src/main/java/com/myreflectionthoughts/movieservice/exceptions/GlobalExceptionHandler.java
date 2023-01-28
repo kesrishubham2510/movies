@@ -11,9 +11,17 @@ import com.myreflectionthoughts.movieservice.dto.response.ExceptionResponse;
 public class GlobalExceptionHandler {
     
     @ExceptionHandler(MovieInfoServiceException.class)
-    public ResponseEntity<ExceptionResponse> handleMovieNotFoundException(MovieInfoServiceException movieInfoServiceException){
+    public ResponseEntity<ExceptionResponse> handleMovieInfoServiceException(MovieInfoServiceException movieInfoServiceException){
         var exceptionResponse = new ExceptionResponse();
         exceptionResponse.setMessage(movieInfoServiceException.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
     }
+
+    @ExceptionHandler(MovieReviewServiceException.class)
+    public ResponseEntity<ExceptionResponse> handleMovieReviewServiceException(MovieReviewServiceException MovieReviewServiceException){
+        var exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setMessage(MovieReviewServiceException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
+    }
+
 }
