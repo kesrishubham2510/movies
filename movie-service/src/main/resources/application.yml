@@ -1,2 +1,6 @@
+restClient:
+  infoService: http://localhost:8002/movie-info-service/movie/
+  reviewService: http://localhost:8003/movie-review-service/review/
+
 server:
   port: 8001
