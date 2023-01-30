@@ -1,0 +1,21 @@
+[
+    
+    {
+        "reviewId" : "review@randomMovie_1",
+        "movieInfoId" : "random@movieId",
+        "review" : "This is a test review 1",
+        "rating" : 5.6
+    },
+    {
+        "reviewId" : "review@randomMovie_2",
+        "movieInfoId" : "random@movieId",
+        "review" : "This is a test review 2",
+        "rating" : 6.0
+    },
+    {
+        "reviewId" : "review@randomMovie_3",
+        "movieInfoId" : "random@movieId",
+        "review" : "This is a test review 3",
+        "rating" : 4.6
+    }
+]

@@ -1,0 +1,7 @@
+{
+    "movieInfoId": "randomMovieID",
+    "title" :"Test movie",
+    "year" : 1998,
+    "cast" : [ "Actor 1","Actor 2", "Actress 1" ],
+    "releaseDate": "2010-12-25"
+}
