@@ -18,10 +18,23 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MovieReviewServiceException.class)
-    public ResponseEntity<ExceptionResponse> handleMovieReviewServiceException(MovieReviewServiceException MovieReviewServiceException){
+    public ResponseEntity<ExceptionResponse> handleMovieReviewServiceException(MovieReviewServiceException movieReviewServiceException){
         var exceptionResponse = new ExceptionResponse();
-        exceptionResponse.setMessage(MovieReviewServiceException.getMessage());
+        exceptionResponse.setMessage(movieReviewServiceException.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
     }
 
+    @ExceptionHandler(MovieInfoServiceServerException.class)
+    public ResponseEntity<ExceptionResponse> handleMovieInfoServiceServerException(MovieInfoServiceServerException movieInfoServiceServerException){
+        var exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setMessage(movieInfoServiceServerException.getMessage());
+        return ResponseEntity.status(500).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(MovieReviewServiceServerException.class)
+    public ResponseEntity<ExceptionResponse> handleMovieReviewServiceServerException(MovieReviewServiceServerException movieReviewServiceServerException){
+        var exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setMessage(movieReviewServiceServerException.getMessage());
+        return ResponseEntity.status(500).body(exceptionResponse);
+    }
 }

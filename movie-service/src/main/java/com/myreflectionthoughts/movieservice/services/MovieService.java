@@ -11,7 +11,8 @@ import com.myreflectionthoughts.moviereviewservice.dto.response.ReviewResponse;
 import com.myreflectionthoughts.movieservice.contracts.Find;
 import com.myreflectionthoughts.movieservice.dto.response.MovieResponse;
 import com.myreflectionthoughts.movieservice.exceptions.MovieInfoServiceException;
-import com.myreflectionthoughts.movieservice.exceptions.MovieReviewServiceException;
+import com.myreflectionthoughts.movieservice.exceptions.MovieInfoServiceServerException;
+import com.myreflectionthoughts.movieservice.exceptions.MovieReviewServiceServerException;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -48,7 +49,7 @@ public class MovieService implements Find<MovieResponse> {
                 .uri("{movieInfoID}", movieInfoId)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError,clientResponse -> clientResponse.bodyToMono(MovieInfoServiceException.class))
-                .onStatus(HttpStatusCode::is5xxServerError, clientResponse-> clientResponse.bodyToMono(MovieInfoServiceException.class))
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse-> clientResponse.bodyToMono(MovieInfoServiceServerException.class))
                 .bodyToMono(MovieInfoResponse.class);
     }
 
@@ -57,7 +58,7 @@ public class MovieService implements Find<MovieResponse> {
                 .get()
                 .uri("/for/{movieInfoID}", movieInfoId)
                 .retrieve()
-                .onStatus(HttpStatusCode::is5xxServerError, clientResponse-> clientResponse.bodyToMono(MovieReviewServiceException.class))
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse-> clientResponse.bodyToMono(MovieReviewServiceServerException.class))
                 .bodyToFlux(ReviewResponse.class);
     }
 
