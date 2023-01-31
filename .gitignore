@@ -1,3 +1,6 @@
 *.vscode/
+# to ignore the compiled files
 */target
-*/.gitignore
+# to ignore the auto-generated mac folder files
+*.DS_Store
+*/HELP.md
