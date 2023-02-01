@@ -1,3 +1,5 @@
 *.vscode/
 */target
 */.gitignore
+*/HELP.md
+/.DS_Store
