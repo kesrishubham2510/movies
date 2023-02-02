@@ -13,6 +13,7 @@ import com.myreflectionthoughts.movieservice.dto.response.MovieResponse;
 import com.myreflectionthoughts.movieservice.exceptions.MovieInfoServiceException;
 import com.myreflectionthoughts.movieservice.exceptions.MovieInfoServiceServerException;
 import com.myreflectionthoughts.movieservice.exceptions.MovieReviewServiceServerException;
+import com.myreflectionthoughts.movieservice.utils.RetryCondition;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -50,7 +51,8 @@ public class MovieService implements Find<MovieResponse> {
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError,clientResponse -> clientResponse.bodyToMono(MovieInfoServiceException.class))
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse-> clientResponse.bodyToMono(MovieInfoServiceServerException.class))
-                .bodyToMono(MovieInfoResponse.class);
+                .bodyToMono(MovieInfoResponse.class)
+                .retryWhen(RetryCondition.retryCondition());
     }
 
     private Flux<ReviewResponse> getReviewsForMovie(String movieInfoId) {
@@ -59,7 +61,8 @@ public class MovieService implements Find<MovieResponse> {
                 .uri("/for/{movieInfoID}", movieInfoId)
                 .retrieve()
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse-> clientResponse.bodyToMono(MovieReviewServiceServerException.class))
-                .bodyToFlux(ReviewResponse.class);
+                .bodyToFlux(ReviewResponse.class)
+                .retryWhen(RetryCondition.retryCondition());
     }
 
 }

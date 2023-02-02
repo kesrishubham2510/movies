@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.matching.UrlPattern;
 import com.myreflectionthoughts.movieservice.dto.response.MovieResponse;
 import com.myreflectionthoughts.movieservice.exceptions.MovieInfoServiceException;
 import com.myreflectionthoughts.movieservice.exceptions.MovieInfoServiceServerException;
@@ -141,7 +142,8 @@ public class FetchMovieDetails extends TestSetup {
               movieExceptionExchangeResult.getResponseBody().getMessage());
         });
 
-  }
+     this.wireMockServer.verify(3, WireMock.getRequestedFor(UrlPattern.fromOneOf(String.format("/movie-info-service/movie/%s", movieId), null, null, null)));   
+    }
 
   @Test
   void testFetchByMovieID_ThrowsMovieReviewServiceException_500() {
@@ -170,5 +172,8 @@ public class FetchMovieDetails extends TestSetup {
           assertEquals("Internal Server Occured at movie-review-service",
               movieExceptionExchangeResult.getResponseBody().getMessage());
         });
+
+    this.wireMockServer.verify(3, WireMock.getRequestedFor(UrlPattern.fromOneOf(String.format("/movie-review-service/review/for/%s", movieId), null, null, null)));   
+   
   }
 }

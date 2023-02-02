@@ -1,7 +1,7 @@
 package com.myreflectionthoughts.movieservice.bdd;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,14 +32,14 @@ public class TestSetup {
   @Autowired
   protected WebTestClient webTestClient;
 
-  @BeforeAll
+  @BeforeEach
   void setUpServer() {
 
     wireMockServer = new WireMockServer(8025);
     wireMockServer.start();
   }
 
-  @AfterAll
+  @AfterEach
   void shutDownServer() {
     this.wireMockServer.stop();
   }
