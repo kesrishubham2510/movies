@@ -9,7 +9,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import com.myreflectionthoughts.moviereviewservice.dto.request.AddReview;
 import com.myreflectionthoughts.moviereviewservice.dto.request.UpdateReview;
 import com.myreflectionthoughts.moviereviewservice.dto.response.DeleteReviewResponse;
-import com.myreflectionthoughts.moviereviewservice.dto.response.ReviewResponse;
+import com.myreflectionthoughts.library.dto.response.ReviewResponse;
 import com.myreflectionthoughts.moviereviewservice.services.ReviewService;
 
 import reactor.core.publisher.Flux;

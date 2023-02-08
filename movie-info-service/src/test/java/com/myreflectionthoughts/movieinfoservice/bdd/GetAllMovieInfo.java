@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
+import com.myreflectionthoughts.library.dto.response.MovieInfoResponse;
 
 public class GetAllMovieInfo extends TestSetUp{
     

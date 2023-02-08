@@ -12,7 +12,7 @@ import com.myreflectionthoughts.moviereviewservice.contracts.UpdateEntity;
 import com.myreflectionthoughts.moviereviewservice.dto.request.AddReview;
 import com.myreflectionthoughts.moviereviewservice.dto.request.UpdateReview;
 import com.myreflectionthoughts.moviereviewservice.dto.response.DeleteReviewResponse;
-import com.myreflectionthoughts.moviereviewservice.dto.response.ReviewResponse;
+import com.myreflectionthoughts.library.dto.response.ReviewResponse;
 import com.myreflectionthoughts.moviereviewservice.exceptions.ReviewNotFoundException;
 import com.myreflectionthoughts.moviereviewservice.repositories.ReviewRepository;
 import com.myreflectionthoughts.moviereviewservice.utils.MovieReviewMapper;

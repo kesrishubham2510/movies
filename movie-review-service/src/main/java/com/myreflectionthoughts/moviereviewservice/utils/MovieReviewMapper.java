@@ -3,7 +3,7 @@ package com.myreflectionthoughts.moviereviewservice.utils;
 import org.springframework.stereotype.Component;
 
 import com.myreflectionthoughts.moviereviewservice.dto.request.AddReview;
-import com.myreflectionthoughts.moviereviewservice.dto.response.ReviewResponse;
+import com.myreflectionthoughts.library.dto.response.ReviewResponse;
 import com.myreflectionthoughts.moviereviewservice.models.Review;
 
 @Component

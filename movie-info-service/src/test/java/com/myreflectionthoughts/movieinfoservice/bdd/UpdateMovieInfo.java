@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 
-import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
+import com.myreflectionthoughts.library.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.exceptions.MovieInfoNotFoundException;
 
 public class UpdateMovieInfo extends TestSetUp{

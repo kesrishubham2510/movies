@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 
 import com.myreflectionthoughts.moviereviewservice.dto.response.DeleteReviewResponse;
-import com.myreflectionthoughts.moviereviewservice.dto.response.ReviewResponse;
+import com.myreflectionthoughts.library.dto.response.ReviewResponse;
 
 public class DeleteReviewTest extends TestSetup{
     

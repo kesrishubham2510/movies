@@ -16,8 +16,8 @@ import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
-import com.myreflectionthoughts.moviereviewservice.dto.response.ReviewResponse;
+import com.myreflectionthoughts.library.dto.response.MovieInfoResponse;
+import com.myreflectionthoughts.library.dto.response.ReviewResponse;
 import com.myreflectionthoughts.movieservice.controllers.MovieController;
 import com.myreflectionthoughts.movieservice.dto.response.MovieResponse;
 import com.myreflectionthoughts.movieservice.exceptions.MovieInfoServiceException;

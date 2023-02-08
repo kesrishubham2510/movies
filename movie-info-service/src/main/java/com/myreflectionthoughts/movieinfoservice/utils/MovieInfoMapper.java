@@ -3,7 +3,7 @@ package com.myreflectionthoughts.movieinfoservice.utils;
 import org.springframework.stereotype.Component;
 
 import com.myreflectionthoughts.movieinfoservice.dto.request.AddMovieInfo;
-import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
+import com.myreflectionthoughts.library.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.models.MovieInfo;
 
 @Component

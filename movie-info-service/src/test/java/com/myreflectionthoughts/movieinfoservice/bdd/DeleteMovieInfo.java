@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 
 import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoDeletionResponse;
-import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
+import com.myreflectionthoughts.library.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.exceptions.MovieInfoNotFoundException;
 
 public class DeleteMovieInfo extends TestSetUp {

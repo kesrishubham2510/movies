@@ -7,7 +7,7 @@ import java.util.List;
 import com.myreflectionthoughts.movieinfoservice.dto.request.AddMovieInfo;
 import com.myreflectionthoughts.movieinfoservice.dto.request.UpdateMovieInfo;
 import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoDeletionResponse;
-import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
+import com.myreflectionthoughts.library.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.models.MovieInfo;
 
 

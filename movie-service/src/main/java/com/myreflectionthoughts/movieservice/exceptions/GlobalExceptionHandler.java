@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.myreflectionthoughts.movieservice.dto.response.ExceptionResponse;
+import com.myreflectionthoughts.library.dto.response.ExceptionResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

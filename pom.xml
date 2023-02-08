@@ -19,6 +19,7 @@
 	<packaging>pom</packaging>
 	
 	<modules>
+		<module>library</module>
         <module>movie-service</module>
         <module>movie-info-service</module>
         <module>movie-review-service</module>

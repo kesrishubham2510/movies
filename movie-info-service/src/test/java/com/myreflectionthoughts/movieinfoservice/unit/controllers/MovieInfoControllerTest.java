@@ -19,9 +19,9 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.myreflectionthoughts.movieinfoservice.ConstructUtils;
 import com.myreflectionthoughts.movieinfoservice.controllers.MovieInfoController;
-import com.myreflectionthoughts.movieinfoservice.dto.response.ExceptionResponse;
+import com.myreflectionthoughts.library.dto.response.ExceptionResponse;
 import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoDeletionResponse;
-import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
+import com.myreflectionthoughts.library.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.exceptions.MovieInfoNotFoundException;
 import com.myreflectionthoughts.movieinfoservice.services.MovieInfoService;
 

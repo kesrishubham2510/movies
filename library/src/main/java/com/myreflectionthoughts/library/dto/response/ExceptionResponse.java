@@ -1,4 +1,4 @@
-package com.myreflectionthoughts.movieservice.dto.response;
+package com.myreflectionthoughts.library.dto.response;
 
 import lombok.Data;
 

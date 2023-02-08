@@ -2,7 +2,7 @@ package com.myreflectionthoughts.moviereviewservice.bdd;
 
 import org.junit.jupiter.api.Test;
 
-import com.myreflectionthoughts.moviereviewservice.dto.response.ReviewResponse;
+import com.myreflectionthoughts.library.dto.response.ReviewResponse;
 
 public class GetAllReviewsTests extends TestSetup{
     

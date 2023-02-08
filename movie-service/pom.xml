@@ -21,13 +21,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.myreflectionthoughts</groupId>
-			<artifactId>movie-review-service</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.myreflectionthoughts</groupId>
-			<artifactId>movie-info-service</artifactId>
-			<version>${project.parent.version}</version>
+			<artifactId>library</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.tomakehurst</groupId>

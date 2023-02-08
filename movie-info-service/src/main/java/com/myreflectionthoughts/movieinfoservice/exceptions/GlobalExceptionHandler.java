@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.support.WebExchangeBindException;
 
-import com.myreflectionthoughts.movieinfoservice.dto.response.ExceptionResponse;
+import com.myreflectionthoughts.library.dto.response.ExceptionResponse;
 import com.myreflectionthoughts.movieinfoservice.dto.response.ValidationExceptionResponse;
 
 @ControllerAdvice

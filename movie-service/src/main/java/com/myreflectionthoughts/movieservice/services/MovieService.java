@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoResponse;
-import com.myreflectionthoughts.moviereviewservice.dto.response.ReviewResponse;
+import com.myreflectionthoughts.library.dto.response.MovieInfoResponse;
+import com.myreflectionthoughts.library.dto.response.ReviewResponse;
 import com.myreflectionthoughts.movieservice.contracts.Find;
 import com.myreflectionthoughts.movieservice.dto.response.MovieResponse;
 import com.myreflectionthoughts.movieservice.exceptions.MovieInfoServiceException;
