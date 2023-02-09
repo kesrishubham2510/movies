@@ -5,5 +5,5 @@
    * movie-info-service [https://github.com/kesrishubham2510/movies/tree/dev/movie-info-service]
    * movie-review-service [https://github.com/kesrishubham2510/movies/tree/dev/movie-review-service]
    
-* Checkout the dev branch to explore and give feedback [https://github.com/kesrishubham2510/movies/tree/dev]
+* Checkout the dev branch to explore the code and give feedback [https://github.com/kesrishubham2510/movies/tree/dev]
 * Checkout my repo for self-learning examples of common webflux operators [https://github.com/kesrishubham2510/WebFlux-example]
