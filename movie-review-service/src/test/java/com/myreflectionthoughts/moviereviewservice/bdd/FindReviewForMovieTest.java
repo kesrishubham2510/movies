@@ -50,7 +50,7 @@ public class FindReviewForMovieTest extends TestSetup{
     }
 
     @Test
-    void testGetAllReviewsOfMovie_ThrowsReviewNotFoundException(){
+    void testGetAllReviewsOfMovie_ShouldReturnEmptyList(){
 
          /*
              * add review for a movie
@@ -80,11 +80,9 @@ public class FindReviewForMovieTest extends TestSetup{
                              .uri(String.format("%sfor/%s",BASE_URL,wrongMovieID))
                              .exchange()
                              .expectStatus()
-                             .isNotFound()
-                             .expectBody(String.class)
-                             .consumeWith(movieReviewsResponse->{
-                                assertEquals(String.format("No reviews were found for the requested movie (id:- %s), Please check movieInfoId",wrongMovieID), movieReviewsResponse.getResponseBody());
-                             });  
+                             .isOk()
+                             .expectBodyList(ReviewResponse.class)
+                             .hasSize(0);  
  
     }
      

@@ -84,9 +84,8 @@ FindReviews<ReviewResponse>
     @Override
     public Flux<ReviewResponse> findForId(String id) {
         // Method returns all the existing reviews for a movie
-        return  reviewRepository.findByMovieInfoId(id).map(movieReviewMapper::toReviewResponse).switchIfEmpty(
-            Mono.error( new ReviewNotFoundException(String.format("No reviews were found for the requested movie (id:- %s), Please check movieInfoId",id)))
-        );
+        // Removed error throwing in case of empty reviews
+        return  reviewRepository.findByMovieInfoId(id).map(movieReviewMapper::toReviewResponse);
     }
 
 }
