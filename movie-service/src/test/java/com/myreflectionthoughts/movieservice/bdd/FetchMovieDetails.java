@@ -27,8 +27,8 @@ public class FetchMovieDetails extends TestSetup {
     var movieId = "randomMovieID";
 
     /*
-     * By default the file "movieInfoResponse.json" will be
-     * looked under /test/resources/__files
+         * By default the file "movieInfoResponse.json" will be
+           looked under /test/resources/__files
      */
 
     // stub for movie-info-service

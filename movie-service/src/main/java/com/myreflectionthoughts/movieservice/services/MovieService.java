@@ -65,4 +65,13 @@ public class MovieService implements Find<MovieResponse> {
                 .retryWhen(RetryCondition.retryCondition());
     }
 
+    public Flux<MovieInfoResponse> getLatestMovieUpdates(){
+        return movieInfoServiceClient
+                .get() 
+                .uri("/stream")
+                .retrieve()
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse-> clientResponse.bodyToMono(MovieReviewServiceServerException.class))
+                .bodyToFlux(MovieInfoResponse.class);
+    }
+
 }

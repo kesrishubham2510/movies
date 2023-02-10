@@ -2,6 +2,7 @@ package com.myreflectionthoughts.movieinfoservice.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.myreflectionthoughts.library.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.dto.request.AddMovieInfo;
 import com.myreflectionthoughts.movieinfoservice.dto.request.UpdateMovieInfo;
 import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoDeletionResponse;
-import com.myreflectionthoughts.library.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.services.MovieInfoService;
 
 import jakarta.validation.Valid;
@@ -58,6 +59,16 @@ public class MovieInfoController {
     // @ResponseStatus(HttpStatus.OK)
     Mono<ResponseEntity<MovieInfoDeletionResponse>> deleteMovieInfo(@PathVariable("id") String movieId){
       return movieInfoService.delete(movieId).map(ResponseEntity::ok);
+    }
+
+    /*
+        * This end point sends/publishes the latest movieInfos to the subscriber
+        * If the subscribes hits the end point for the first time the complete sink of movies is 
+          published else the latest one. 
+     */
+    @GetMapping(value ="stream", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    Flux<MovieInfoResponse> getLatestMovieUpdates(){
+        return movieInfoService.getMovieSink().asFlux();
     }
 
     

@@ -3,6 +3,7 @@ package com.myreflectionthoughts.movieinfoservice.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.myreflectionthoughts.library.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.contracts.DeleteEntity;
 import com.myreflectionthoughts.movieinfoservice.contracts.FindAll;
 import com.myreflectionthoughts.movieinfoservice.contracts.FindOne;
@@ -11,13 +12,13 @@ import com.myreflectionthoughts.movieinfoservice.contracts.UpdateEntity;
 import com.myreflectionthoughts.movieinfoservice.dto.request.AddMovieInfo;
 import com.myreflectionthoughts.movieinfoservice.dto.request.UpdateMovieInfo;
 import com.myreflectionthoughts.movieinfoservice.dto.response.MovieInfoDeletionResponse;
-import com.myreflectionthoughts.library.dto.response.MovieInfoResponse;
 import com.myreflectionthoughts.movieinfoservice.exceptions.MovieInfoNotFoundException;
 import com.myreflectionthoughts.movieinfoservice.repositories.MovieInfoRepository;
 import com.myreflectionthoughts.movieinfoservice.utils.MovieInfoMapper;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.Sinks;
 
 @Service
 public class MovieInfoService 
@@ -28,6 +29,10 @@ UpdateEntity<UpdateMovieInfo,MovieInfoResponse>,
 DeleteEntity<MovieInfoDeletionResponse>
 {
     
+    // to every new subscriber, this sink will publish all the movieInfo's from the sink
+
+    private Sinks.Many<MovieInfoResponse> movieInfoSink = Sinks.many().replay().all();
+
     @Autowired 
     private MovieInfoRepository movieInfoRepository;
 
@@ -36,7 +41,7 @@ DeleteEntity<MovieInfoDeletionResponse>
 
     @Override
     public Mono<MovieInfoResponse> save(Mono<AddMovieInfo> reqDTO) {
-        return reqDTO.map(movieInfoMapper::toMovieInfo).flatMap(movieInfoRepository::save).map(movieInfoMapper::toMovieResponseDTO);
+        return reqDTO.map(movieInfoMapper::toMovieInfo).flatMap(movieInfoRepository::save).map(movieInfoMapper::toMovieResponseDTO).doOnNext(savedMovie->movieInfoSink.tryEmitNext(savedMovie));
     }
 
     @Override
@@ -95,6 +100,9 @@ DeleteEntity<MovieInfoDeletionResponse>
         
     }
 
+    public Sinks.Many<MovieInfoResponse> getMovieSink(){
+        return movieInfoSink;
+    }
     
 
 }
