@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 
 import com.myreflectionthoughts.library.dto.response.ReviewResponse;
+import com.myreflectionthoughts.moviereviewservice.ConstructUtils;
 
 public class UpdateReviewTest extends TestSetup {
     

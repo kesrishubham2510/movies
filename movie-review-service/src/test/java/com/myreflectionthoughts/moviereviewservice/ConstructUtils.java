@@ -1,4 +1,4 @@
-package com.myreflectionthoughts.moviereviewservice.bdd;
+package com.myreflectionthoughts.moviereviewservice;
 
 import com.myreflectionthoughts.moviereviewservice.dto.request.AddReview;
 import com.myreflectionthoughts.moviereviewservice.dto.request.UpdateReview;
