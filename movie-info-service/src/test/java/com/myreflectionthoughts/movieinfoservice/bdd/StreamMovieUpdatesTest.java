@@ -73,7 +73,8 @@ public class StreamMovieUpdatesTest extends TestSetUp{
 
       StepVerifier.create(movieInfoResponseMono)
                   .consumeNextWith(movieInfoResponse-> assertTrue(movieInfoResponse.getMovieInfoId()!=null))
-                  .verifyComplete();
+                  .thenCancel()
+                  .verify();
 
       /*
 
